@@ -1,0 +1,28 @@
+User presses button
+Elevator sensor read the destination floor request
+Elevator sensor notifies the system
+System update the request
+While request queue is not empty
+IF elevator is idle THEN
+determine the direction
+system commands door to close
+IF door is closed within time space THEN
+system commands to start the motor
+system commands the motor to move to the desired direction
+Endif
+Else
+floor sensor detects the floor no.
+floor sensor notifies the system about the floor no.
+system determines whether elevator has to stop at that floor at the floor no.
+if elevator has to stop at that floow THEN
+system command motor to stop
+if motor=stopped THEN
+system command elevator door to open
+if door=opened then
+system updated the request queue
+endif
+endif
+endif
+endif
+ENDWHILE
+END

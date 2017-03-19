@@ -7,7 +7,9 @@ import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
  
 public class gui extends JPanel{
 	private JButton jcomp1;
@@ -411,6 +413,12 @@ public class gui extends JPanel{
 	    //Object[] columnNames2 = {"Action No.","X","Y","Hazard State"};
 	    int len, len2, i;
 	    len = scenarioList.size();
+	    JPanel panel = new JPanel();
+	    panel.setLayout(new GridLayout(len,1));
+	    JScrollPane scrollPanepanel = new JScrollPane(panel);
+	    scrollPanepanel.setBounds(50,height,900,600);
+	    scrollPanepanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPanepanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	    for(i = 0; i < len; i++)
 	    {
 	    	System.out.println("$$$: "+scenarioList.get(i));
@@ -420,12 +428,27 @@ public class gui extends JPanel{
 	    	System.out.println(strg.countTokens());
 		    obj4 = convertTable4Array(strg, strgtemp, len2, table3array, columnobj, countcol);
 		    Object[][] data = obj4;
-		    JTable table3 = new JTable(data,columnNames2);
+		    JTable table3 = new JTable(data,columnNames2){
+	            
+	            //Implement table cell tool tips.
+	            public String getToolTipText(MouseEvent e) {
+	                String tip = null;
+	                java.awt.Point p = e.getPoint();
+	                int rowIndex = rowAtPoint(p);
+	                int colIndex = columnAtPoint(p);
+	                int realColumnIndex = convertColumnIndexToModel(colIndex);
+	                tip =  getValueAt(rowIndex, colIndex).toString();
+	                return tip;
+	            }
+		    };
 		    JScrollPane scrollPane5 = new JScrollPane(table3);
 			scrollPane5.setBounds(50,height,900,200);
-			add(scrollPane5);
+			scrollPane5.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	        scrollPane5.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			panel.add(scrollPane5);
 			height+=200;
-	    }	    
+	    }
+	    this.add(scrollPanepanel);
 	}
 	public void selectionButtonPressed5(){
 		removeAll();
@@ -470,9 +493,23 @@ public class gui extends JPanel{
 	    obj3 = convertTable3Array();
 	    
 		Object[][] data = obj3;
-		table3 = new JTable(data,columnNames);
+		table3 = new JTable(data,columnNames){
+            
+            //Implement table cell tool tips.
+            public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int rowIndex = rowAtPoint(p);
+                int colIndex = columnAtPoint(p);
+                int realColumnIndex = convertColumnIndexToModel(colIndex);
+                tip =  getValueAt(rowIndex, colIndex).toString();
+                return tip;
+            }
+	    };
 		scrollPane4 = new JScrollPane(table3);
 		scrollPane4.setBounds(50,150,900,400);
+		scrollPane4.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane4.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		add(scrollPane4);
 		scenariono = new JLabel();
 		scenariono.setText("No of Scenarios: " + scenarioList.size());
@@ -553,10 +590,24 @@ public class gui extends JPanel{
 		        "No. of times loop to repeat"};
 		obj2 = convertTable2Array();
 		Object[][] data = obj2;
-		table2 = new JTable(data,columnNames);
+		table2 = new JTable(data,columnNames){
+            
+            //Implement table cell tool tips.
+            public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int rowIndex = rowAtPoint(p);
+                int colIndex = columnAtPoint(p);
+                int realColumnIndex = convertColumnIndexToModel(colIndex);
+                tip =  getValueAt(rowIndex, colIndex).toString();
+                return tip;
+            }
+	    };
 		scrollPane3 = new JScrollPane(table2);
 		scrollPane3.setBounds(10,150,900,300);
 		//add(scrollPane);
+		scrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		okbutton = new JButton("OK");
 		okbutton.setBounds(300,600,100,25);
 		okbutton.setForeground(Color.red);
@@ -587,8 +638,8 @@ public class gui extends JPanel{
 		        {
 		            lpkount.add(Integer.parseInt(table2.getModel().getValueAt(i,4).toString()));
 		        }
-				createUseCaseGraph2(l1.getLines(), whileSet,lpkount);
-				//generateScenarios2(startNode,lpkount,whileSet);
+				createUseCaseGraph2(l1.getLines(),whileSet,lpkount);
+				generateScenarios2(startNode,lpkount,whileSet);
 				
 				System.out.println("DOne till here");
 	        	selectionButtonPressed5();
@@ -660,13 +711,33 @@ public class gui extends JPanel{
 	    Object[] columnNames = {"Action No","Line No","Action Name"};
 	    
 	    Object[][] data = obj;
-	    table = new JTable(data,columnNames);
+	    table = new JTable(data,columnNames){
+            
+            //Implement table cell tool tips.
+            public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int rowIndex = rowAtPoint(p);
+                int colIndex = columnAtPoint(p);
+                int realColumnIndex = convertColumnIndexToModel(colIndex);
+                tip =  getValueAt(rowIndex, colIndex).toString();
+                return tip;
+            }
+	    };
+	    
 	    //TableColumn sportColumn = table.getColumnModel().getColumn(3);
 	   // TableColumn sportColumn2 = table.getColumnModel().getColumn(4);
 	    System.out.println(doorarray.get(0)+"shakalakaboomboom");
 	    jcb=new JComboBox[doorarray.size()][1000];
 	    System.out.println("FINE"+doorarray.size());
 	    System.out.println(doorarray.get(0).size());
+	    //JPanel panel = new JPanel();
+	    
+	    //panel.setLayout(new BorderLayout());
+	    //JScrollPane scrollPanepanel = new JScrollPane(panel);
+	    //scrollPanepanel.setBounds(10,200,800,400);
+	    //scrollPanepanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //scrollPanepanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	    for (int i=0;i<doorarray.size();i++){
 	    	 for (int j=0;j<table1array.size();j++){
 	    		 jcb[i][j] = new JComboBox();
@@ -684,24 +755,29 @@ public class gui extends JPanel{
 			    		  } 
 			    		} );
 	    		 jcb[i][j].setBounds(510+100*i,220+16*j,100,table.getRowHeight());
+	    		 //jcb[i][j].setBounds(450+100*i,20+16*j,100,table.getRowHeight());
+	    		 //panel.add(jcb[i][j]);
 	    		 add(jcb[i][j]);
 	    	 }
 	    	 
 	    }
+	    
 	    for (int i=0;i<countcol;i++){
 	    	JLabel j =new JLabel(columnobj[i].toString());
 	    	j.setBounds(530+100*i,204,100,table.getRowHeight());
+	    	//j.setBounds(470+100*i,4,100,25);
+	    	//panel.add(j);
 	    	add(j);
 	    }
-	   // comboBox.setSelectedIndex(0);
-	    //sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
-	    //comboBox.setSelectedIndex(0);
-	    //comboBox2.setSelectedIndex(2);
-	    //sportColumn2.setCellEditor(new DefaultCellEditor(comboBox2));
+	    
 	    scrollPane2 = new JScrollPane(table);
 	    //comboBox.setSelectedIndex(0);
 	    scrollPane2.setBounds(10,200,500,400);
+	    
 	    add(scrollPane2);
+	    //panel.add(scrollPane2,BorderLayout.WEST);
+	    //this.add(scrollPanepanel);
+	    
 	    //comboBox.setSelectedIndex(0);
 	    //add(table, BorderLayout.CENTER);
 	    timerlabel = new JLabel("Timer");
@@ -896,9 +972,9 @@ public class gui extends JPanel{
 			int i=0;
 			for (i=0;i<len;i++){
 				System.out.println(scenarioList.get(i));
-				
+				System.out.println(scenarioListA.get(i)+"lol");
 				obj[i][0]="Scenario no. "+(i+1)+":";
-				obj[i][1]=scenarioListA.get(i);
+				obj[i][1]=scenarioList.get(i);
 			}
 			return obj;
 		}
@@ -974,6 +1050,89 @@ public class gui extends JPanel{
 			return obj;
 		}
 	    
+	    public Object[][] convertTable4Array2(StringTokenizer strg, int slen, ArrayList<Integer> ln)
+	    {
+	    	int len = strg.countTokens();
+	    	Object[][] obj = new Object[len][4];
+			int i=0;
+			int g = 0;
+			String sg ="";
+			String str="";
+			String tempstr="";
+			String[] prev = new String[doorarray.size()];
+			/*while(i < prev.length)
+			{
+				System.out.println((String)("^^^^-> "+jcb[i][0].getSelectedItem().toString()));
+				prev[i] = (String)(jcb[i][0].getSelectedItem());
+				i++;
+			}**/
+			i=0;
+			int k = -1, z = -1;
+			while(strg.hasMoreTokens())
+			{
+				int j =0;
+				obj[i][0]=strg.nextToken();
+				if(obj[i][0].toString().contains("("))
+				{
+					int index;
+					System.out.println("With Bracket:"+obj[i][0].toString());
+					index = obj[i][0].toString().indexOf("(");
+					sg = obj[i][0].toString().substring(0, index);
+				}
+				else
+				{
+					sg = obj[i][0].toString();
+				}
+				for(g = 0; g < ln.size(); g++)
+				{
+					if(Integer.parseInt(sg) == ln.get(g))
+					{
+						k = ln.get(g)-1;
+						break;
+					}
+				}
+				obj[i][1]= jcb[0][k].getSelectedItem();
+				obj[i][2]= jcb[1][k].getSelectedItem();
+				if(z != -1)
+				{
+					while(j < prev.length)
+					{
+						System.out.println((String)("^^^^-> "+jcb[j][z].getSelectedItem().toString()));
+						prev[j] = (String)(jcb[j][z].getSelectedItem());
+						j++;
+					}
+					//while(j < prev.length)
+					//{
+					//	System.out.println("In loop, iteration"+j);
+						if(!(prev[0].equalsIgnoreCase(obj[i][1].toString())))
+						{
+							tempstr = "X != "+obj[i][1].toString();
+							StringTokenizer s = new StringTokenizer(str,",");
+							str = tempstr+","+str;
+							while(s.hasMoreTokens())
+							{
+								str = str+","+s.nextToken()+" ^ "+tempstr;
+							}
+						}
+						if(!(prev[1].equalsIgnoreCase(obj[i][2].toString())))
+						{
+							tempstr = "Y != "+obj[i][2].toString();
+							StringTokenizer s = new StringTokenizer(str,",");
+							str = tempstr+","+str;
+							while(s.hasMoreTokens())
+							{
+								str = str+","+s.nextToken()+" ^ "+tempstr;
+							}
+						}
+				}
+				System.out.println("Str is: "+str);
+				obj[i][3]= str;
+				z = k;
+				i++;
+			}
+			return obj;
+		}
+	    
 	    public Node createUseCaseGraph(ArrayList<Line> linf, ArrayList<Integer> whileSet) {
             long start = System.currentTimeMillis();
             Node startNode = new Node(0,"Start",0);
@@ -1033,11 +1192,11 @@ public class gui extends JPanel{
                     whilestack.push(n);
                     currentNode.setTrue_part(n);
                     currentNode = n;
-                    whileSet.add(ln.getLineno()+1);
+                    whileSet.add(ln.getLineno());
                     System.out.printf("here while \n");
                     table1= new Table1(ln.getLineno(),"WHILE",1);
                     table1array.add(table1);
-                    table2 = new Table2(ln.getLineno()+1,table1.getActiono(),ln.getLine_descrip());
+                    table2 = new Table2(ln.getLineno(),table1.getActiono(),ln.getLine_descrip());
                     table2array.add(table2);
                     table3array.add(ln.getLineno());
                 }
@@ -1112,7 +1271,7 @@ public class gui extends JPanel{
         }
 	    
 	    public Node createUseCaseGraph2(ArrayList<Line> linf, ArrayList<Integer> whileSet, ArrayList<Integer> lpkount)
-	    {
+        {
             long start = System.currentTimeMillis();
             Node startNode = new Node(0,"Start",0);
             Node endNode = new Node(1000,"Start",20);
@@ -1147,7 +1306,7 @@ public class gui extends JPanel{
                         table1= new Table1(ln.getLineno(),"ELSE",0);
                         table1array.add(table1);
                     }
-                   
+                  
                     else {
                         System.out.print("Error1");
                     }
@@ -1167,21 +1326,21 @@ public class gui extends JPanel{
                     }
                     currentNode = n;
                 }
-              
+             
                 else if (ln.getLine_descrip().startsWith("WHILE")) {
                     Node n = new Node(ln.getLineno(),ln.getLine_descrip(),5);
-                    whileSet.add(ln.getLineno()+1);
+                    whileSet.add(ln.getLineno());
                     System.out.println("%%%%%%%%: "+whileSet.indexOf(ln.getLineno()+1));
                     if(!whilestack.isEmpty())
                     {
-                    	//System.out.println("Order lpkount: "+whileSet.indexOf(ln.getLineno()+1)+" &&** "+(lpkount.get(whileSet.indexOf(ln.getLineno()+1)))*lpkount.get(whileSet.indexOf(whilestack.peek().getNode_no())));
-                    	//lpkount.set(whileSet.indexOf(ln.getLineno()+1), (lpkount.get(whileSet.indexOf(ln.getLineno()+1)))*lpkount.get(whileSet.indexOf(whilestack.peek().getNode_no())));
-                    	relation.set(whileSet.indexOf(ln.getLineno()+1), whileSet.indexOf(whilestack.peek().getNode_no()));
-                    	tlpkount.set(whileSet.indexOf(ln.getLineno()+1), lpkount.get(whileSet.indexOf(ln.getLineno()+1)));
+                        //System.out.println("Order lpkount: "+whileSet.indexOf(ln.getLineno()+1)+" &&** "+(lpkount.get(whileSet.indexOf(ln.getLineno()+1)))*lpkount.get(whileSet.indexOf(whilestack.peek().getNode_no())));
+                        //lpkount.set(whileSet.indexOf(ln.getLineno()+1), (lpkount.get(whileSet.indexOf(ln.getLineno()+1)))*lpkount.get(whileSet.indexOf(whilestack.peek().getNode_no())));
+                        relation.set(whileSet.indexOf(ln.getLineno()), whileSet.indexOf(whilestack.peek().getNode_no()));
+                        tlpkount.set(whileSet.indexOf(ln.getLineno()), lpkount.get(whileSet.indexOf(ln.getLineno())));
                     }
-                    System.out.println("Relation: "+relation.get(whileSet.indexOf(ln.getLineno()+1)));
-                    System.out.println("LP: "+lpkount.get(whileSet.indexOf(ln.getLineno()+1)));
-                    
+                    System.out.println("Relation: "+relation.get(whileSet.indexOf(ln.getLineno())));
+                    System.out.println("LP: "+lpkount.get(whileSet.indexOf(ln.getLineno())));
+                   
                     whilestack.push(n);
                     currentNode.setTrue_part(n);
                     currentNode = n;
@@ -1205,7 +1364,7 @@ public class gui extends JPanel{
                     else {
                         System.out.print("Error4");
                     }
-                 
+                
                 }
                 else if (ln.getLine_descrip().startsWith("END")) {
                     if (whilestack.isEmpty() && ifstack.isEmpty()){
@@ -1292,6 +1451,7 @@ public class gui extends JPanel{
                     case 5:  
                             int i = whileSet.indexOf(cNode.getNode_no());
                             temp2 = i;
+                            System.out.println(i+"hulaahulaa"+cNode.getNode_no()+"lula"+lpkount.get(i));
                             if(newStack.search(cNode) == -1)            //Node not there
                             {
                                 scenarioStack.push(scenario + cNode.getNode_no() +"(F),");
@@ -1301,25 +1461,33 @@ public class gui extends JPanel{
                                 cNode = cNode.getTrue_part();
                                 lpkount.set(i, (lpkount.get(i)-1));
                             }
-                            else if(lpkount.get(i) > 1)
+                            else if(lpkount.get(i) > 0)
                             {
                                 scenario = scenario+ cNode.getNode_no()+"(T),";
                                 scenarioA = scenarioA+ "A"+cNode.getNode_no()+"(T),";
                                 cNode = cNode.getTrue_part();
                                 lpkount.set(i, (lpkount.get(i)-1));
-                            }                          
-                            else if(relation.get(i) != -1 && lpkount.get(i) == 0)
+                            }
+                            else
                             {
-                            	System.out.println("@@@@@@@@@@"+relation.get(i));
-                            	System.out.println("xxxxxxxxx"+relation.get(i));
-                            	if(lpkount.get(relation.get(i))>0)
-                            	{
-                            		System.out.println("fade to"+lpkount.get(relation.get(i)));
-                            		lpkount.set(i, tlpkount.get(i));
+                            	if (relation.get(whileSet.indexOf(cNode.getNode_no()))!=-1){
+                            		int prev=relation.get(whileSet.indexOf(cNode.getNode_no()));
+                            		while(prev!=-1){
+                            			if (lpkount.get(prev)>0){
+                            				lpkount.set(i, (tlpkount.get(i)));
+                            				System.out.println("Mugambo"+lpkount.get(i));
+                            				break;
+                            			}
+                            			else{
+                            				prev=relation.get(prev);
+                            			}
+                            		}
                             	}
-                            	scenario = scenario+ cNode.getNode_no()+"(F),";
+                                scenario = scenario+ cNode.getNode_no()+"(F),";
                                 scenarioA = scenarioA+ "A"+cNode.getNode_no()+"(F),";
                                 cNode = cNode.getElse_part();
+                                
+                                      
                             }
                             break;
                     case 3:
